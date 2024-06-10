@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EU4 MT generator</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <h1>EU4 MT generator</h1>
+    <div class="main-content">
+        <div class="containers">
+            <div class="container" id="trigger-container" data-can-contain="true">Trigger</div>
+            <div class="container" id="effect-container" data-can-contain="true">Effect</div>
+        </div>
+        <div class="elements">
+            <div class="delete-container" id="delete-container" data-can-contain="true">Drop elements here to delete</div>
+            <h2>Add New Element</h2>
+            <form id="addElementForm">
+                <label for="elementSearch">Search Element:</label>
+                <input type="text" id="elementSearch" name="elementSearch" placeholder="Search for an element...">
+                <div id="elementOptions" class="element-options"></div>
+                <button type="submit">Add Element</button>
+            </form>
+            <h2>Elements</h2>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

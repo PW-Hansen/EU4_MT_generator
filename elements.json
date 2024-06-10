@@ -1,0 +1,57 @@
+[
+    {
+        "name": "add_treasury",
+        "scope": "effect",
+        "prefix": "add_treasury = ",
+        "canContain": false,
+        "parameters": [
+            {
+                "name": "amount",
+                "inputType": "number"
+            }
+        ]
+    },
+    {
+        "name": "is_at_war",
+        "scope": "trigger",
+        "prefix": "is_at_war = ",
+        "canContain": false,
+        "parameters": [
+            {
+                "name": "status",
+                "inputType": "boolean"
+            }
+        ]
+    },
+    {
+        "name": "has_country_flag",
+        "scope": "trigger",
+        "prefix": "has_country_flag = ",
+        "canContain": false,
+        "parameters": [
+            {
+                "name": "flag",
+                "inputType": "string"
+            }
+        ]
+    },
+    {
+        "name": "set_country_flag",
+        "scope": "effect",
+        "prefix": "set_country_flag = ",
+        "canContain": false,
+        "parameters": [
+            {
+                "name": "flag",
+                "inputType": "string"
+            }
+        ]
+    },
+    {
+        "name": "OR",
+        "scope": "logic",
+        "prefix": "OR",
+        "canContain": true,
+        "parameters": [ ]
+    }
+]
