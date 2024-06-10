@@ -56,58 +56,104 @@ document.addEventListener('DOMContentLoaded', () => {
         if (selectedElement) {
             const newElement = document.createElement('div');
             newElement.classList.add('element');
-            newElement.classList.add(selectedElement.scope); // Add the appropriate scope class
+            newElement.classList.add(selectedElement.type); // Add the appropriate type class
             newElement.draggable = true;
             newElement.id = 'element' + nextElementId;
             nextElementId++;
-
+    
             // Create text node for the prefix
             const prefixTextNode = document.createTextNode(selectedElement.prefix);
             newElement.appendChild(prefixTextNode);
-
-            // Create input fields based on parameters
-            selectedElement.parameters.forEach(param => {
-                let inputField;
-                if (param.inputType === 'boolean') {
-                    inputField = document.createElement('select');
-                    const trueOption = document.createElement('option');
-                    trueOption.value = 'true';
-                    trueOption.textContent = 'yes';
-                    const falseOption = document.createElement('option');
-                    falseOption.value = 'false';
-                    falseOption.textContent = 'no';
-                    inputField.appendChild(trueOption);
-                    inputField.appendChild(falseOption);
-                } else if (param.inputType === 'number') {
-                    inputField = document.createElement('input');
-                    inputField.type = 'number';
-                    inputField.placeholder = 'Enter a number';
-                } else if (param.inputType === 'string') {
-                    inputField = document.createElement('input');
-                    inputField.type = 'text';
-                    inputField.placeholder = 'Enter text';
+    
+            // If the element has parameters, create input fields
+            if (selectedElement.parameters && selectedElement.parameters.length > 0) {
+                if (selectedElement.parameters.length === 1) {
+                    // Single parameter: just add the input field without curly brackets
+                    const param = selectedElement.parameters[0];
+                    let inputField;
+                    if (param.inputType === 'boolean') {
+                        inputField = document.createElement('select');
+                        const trueOption = document.createElement('option');
+                        trueOption.value = 'true';
+                        trueOption.textContent = 'True';
+                        const falseOption = document.createElement('option');
+                        falseOption.value = 'false';
+                        falseOption.textContent = 'False';
+                        inputField.appendChild(trueOption);
+                        inputField.appendChild(falseOption);
+                    } else if (param.inputType === 'number') {
+                        inputField = document.createElement('input');
+                        inputField.type = 'number';
+                        inputField.placeholder = 'Enter a number';
+                    } else if (param.inputType === 'string') {
+                        inputField = document.createElement('input');
+                        inputField.type = 'text';
+                        inputField.placeholder = 'Enter text';
+                    }
+                    inputField.classList.add('element-input');
+                    inputField.name = param.name; // Set the name attribute for the input field
+                    newElement.appendChild(inputField);
+                } else {
+                    // Multiple parameters: wrap them in curly brackets and display their names
+                    const paramContainer = document.createElement('div');
+                    paramContainer.classList.add('param-container');
+                    newElement.appendChild(document.createTextNode(' {'));
+    
+                    selectedElement.parameters.forEach((param) => {
+                        const paramWrapper = document.createElement('div');
+    
+                        // Create label for the parameter
+                        const paramLabel = document.createElement('span');
+                        paramLabel.textContent = `\t${param.name} = `;
+                        paramWrapper.appendChild(paramLabel);
+    
+                        // Create input field based on parameter type
+                        let inputField;
+                        if (param.inputType === 'boolean') {
+                            inputField = document.createElement('select');
+                            const trueOption = document.createElement('option');
+                            trueOption.value = 'true';
+                            trueOption.textContent = 'True';
+                            const falseOption = document.createElement('option');
+                            falseOption.value = 'false';
+                            falseOption.textContent = 'False';
+                            inputField.appendChild(trueOption);
+                            inputField.appendChild(falseOption);
+                        } else if (param.inputType === 'number') {
+                            inputField = document.createElement('input');
+                            inputField.type = 'number';
+                            inputField.placeholder = 'Enter a number';
+                        } else if (param.inputType === 'string') {
+                            inputField = document.createElement('input');
+                            inputField.type = 'text';
+                            inputField.placeholder = 'Enter text';
+                        }
+                        inputField.classList.add('element-input');
+                        inputField.name = param.name; // Set the name attribute for the input field
+                        paramWrapper.appendChild(inputField);
+    
+                        paramContainer.appendChild(paramWrapper);
+                    });
+    
+                    newElement.appendChild(paramContainer);
+                    const closingBraceNode = document.createElement('div');
+                    closingBraceNode.textContent = '}';
+                    newElement.appendChild(closingBraceNode);
                 }
-                inputField.classList.add('element-input');
-                inputField.name = param.name; // Set the name attribute for the input field
-                newElement.appendChild(inputField);
-            });
-
-            // Store canContain property
-            if (selectedElement.canContain) {
-                newElement.dataset.canContain = 'true';
-            } else {
-                newElement.dataset.canContain = 'false';
             }
-
+    
+            // Store canContain property
+            newElement.dataset.canContain = selectedElement.canContain.toString();
+    
             newElement.addEventListener('dragstart', dragStart);
             newElement.addEventListener('dragover', dragOver);
             newElement.addEventListener('dragenter', dragEnter);
             newElement.addEventListener('dragleave', dragLeave);
             newElement.addEventListener('drop', drop);
-
+    
             document.querySelector('.elements').appendChild(newElement);
             console.log('Added new element:', selectedElement.name, 'with ID:', newElement.id);
-
+    
             // Clear search bar and filtered elements
             elementSearch.value = '';
             filteredElements = elements;
@@ -115,7 +161,7 @@ document.addEventListener('DOMContentLoaded', () => {
             alert('Please select a valid element.');
         }
     }
-                
+                            
     function addContainerEventListeners(container) {
         container.addEventListener('dragover', dragOver);
         container.addEventListener('dragenter', dragEnter);

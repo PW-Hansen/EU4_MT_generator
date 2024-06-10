@@ -1,7 +1,8 @@
 [
     {
         "name": "add_treasury",
-        "scope": "effect",
+        "type": "effect",
+        "validScope": ["country"],
         "prefix": "add_treasury = ",
         "canContain": false,
         "parameters": [
@@ -13,7 +14,7 @@
     },
     {
         "name": "is_at_war",
-        "scope": "trigger",
+        "type": "trigger",
         "prefix": "is_at_war = ",
         "canContain": false,
         "parameters": [
@@ -25,7 +26,7 @@
     },
     {
         "name": "has_country_flag",
-        "scope": "trigger",
+        "type": "trigger",
         "prefix": "has_country_flag = ",
         "canContain": false,
         "parameters": [
@@ -37,7 +38,7 @@
     },
     {
         "name": "set_country_flag",
-        "scope": "effect",
+        "type": "effect",
         "prefix": "set_country_flag = ",
         "canContain": false,
         "parameters": [
@@ -48,8 +49,53 @@
         ]
     },
     {
+        "name": "country_event",
+        "type": "effect",
+        "prefix": "country_event = ",
+        "canContain": false,
+        "parameters": [
+            {
+                "name": "event_id",
+                "inputType": "string"
+            },
+            {
+                "name": "days (optional)",
+                "inputType": "number"
+            },
+            {
+                "name": "random (optional)",
+                "inputType": "number"
+            },
+            {
+                "name": "tooltip (optional)",
+                "inputType": "string"
+            }
+        ]
+    },
+    {
+        "name": "if",
+        "type": "logic",
+        "prefix": "if",
+        "canContain": true,
+        "parameters": [ ]
+    },
+    {
+        "name": "NOT",
+        "type": "logic",
+        "prefix": "NOT",
+        "canContain": true,
+        "parameters": [ ]
+    },
+    {
+        "name": "AND",
+        "type": "logic",
+        "prefix": "AND",
+        "canContain": true,
+        "parameters": [ ]
+    },
+    {
         "name": "OR",
-        "scope": "logic",
+        "type": "logic",
         "prefix": "OR",
         "canContain": true,
         "parameters": [ ]

@@ -94,3 +94,12 @@ h1 {
 .container#effect-container {
     background-color: var(--effect-color);
 }
+#rootForm {
+    display: flex;
+    align-items: center;
+    gap: 10px; /* Adjust the spacing between elements as needed */
+}
+
+#rootOptions {
+    margin-top: 10px; /* Adjust if needed for spacing below the form */
+}
