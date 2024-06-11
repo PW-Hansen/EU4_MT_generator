@@ -5,6 +5,7 @@
         "validScope": ["country"],
         "prefix": "add_treasury = ",
         "canContain": false,
+        "wrapped": false,
         "parameters": [
             {
                 "name": "amount",
@@ -15,8 +16,10 @@
     {
         "name": "is_at_war",
         "type": "trigger",
+        "validScope": ["country"],
         "prefix": "is_at_war = ",
         "canContain": false,
+        "wrapped": false,
         "parameters": [
             {
                 "name": "status",
@@ -27,8 +30,10 @@
     {
         "name": "has_country_flag",
         "type": "trigger",
+        "validScope": ["country"],
         "prefix": "has_country_flag = ",
         "canContain": false,
+        "wrapped": false,
         "parameters": [
             {
                 "name": "flag",
@@ -39,8 +44,38 @@
     {
         "name": "set_country_flag",
         "type": "effect",
+        "validScope": ["country"],
         "prefix": "set_country_flag = ",
         "canContain": false,
+        "wrapped": false,
+        "parameters": [
+            {
+                "name": "flag",
+                "inputType": "string"
+            }
+        ]
+    },
+    {
+        "name": "has_province_flag",
+        "type": "trigger",
+        "validScope": ["province"],
+        "prefix": "has_province_flag = ",
+        "canContain": false,
+        "wrapped": false,
+        "parameters": [
+            {
+                "name": "flag",
+                "inputType": "string"
+            }
+        ]
+    },
+    {
+        "name": "set_province_flag",
+        "type": "effect",
+        "validScope": ["province"],
+        "prefix": "set_province_flag = ",
+        "canContain": false,
+        "wrapped": false,
         "parameters": [
             {
                 "name": "flag",
@@ -51,8 +86,10 @@
     {
         "name": "country_event",
         "type": "effect",
+        "validScope": ["country"],
         "prefix": "country_event = ",
         "canContain": false,
+        "wrapped": true,
         "parameters": [
             {
                 "name": "event_id",
@@ -75,29 +112,37 @@
     {
         "name": "if",
         "type": "logic",
-        "prefix": "if",
+        "validScope": ["country", "province"],
+        "prefix": "if = ",
         "canContain": true,
+        "wrapped": true,
         "parameters": [ ]
     },
     {
         "name": "NOT",
         "type": "logic",
-        "prefix": "NOT",
+        "validScope": ["country", "province"],
+        "prefix": "NOT = ",
         "canContain": true,
+        "wrapped": true,
         "parameters": [ ]
     },
     {
         "name": "AND",
         "type": "logic",
-        "prefix": "AND",
+        "validScope": ["country", "province"],
+        "prefix": "AND = ",
         "canContain": true,
+        "wrapped": true,
         "parameters": [ ]
     },
     {
         "name": "OR",
         "type": "logic",
-        "prefix": "OR",
+        "validScope": ["country", "province"],
+        "prefix": "OR = ",
         "canContain": true,
+        "wrapped": true,
         "parameters": [ ]
     }
 ]

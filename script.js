@@ -2,11 +2,16 @@ document.addEventListener('DOMContentLoaded', () => {
     console.log('DOM fully loaded and parsed');
 
     let nextElementId = 0; // Variable to keep track of the next element ID
+    let nextScopeId = 0; // Variable to keep track of the next element ID
     const elementSearch = document.getElementById('elementSearch');
     const elementOptions = document.getElementById('elementOptions');
-    let filteredElements = []; // Variable to store filtered elements
+    const scopeSearch = document.getElementById('scopeSearch');
+    const scopeOptions = document.getElementById('scopeOptions');
     const containers = document.querySelectorAll('.container');
+    let filteredElements = []; // Variable to store filtered elements
     let elements = []; // Array to store all elements fetched from JSON
+    let filteredScopes = []; // Variable to store filtered scopes
+    let scopes = []; // Array to store all scopes fetched from JSON
 
     containers.forEach(container => {
         addContainerEventListeners(container);
@@ -14,6 +19,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const addElementForm = document.getElementById('addElementForm');
     addElementForm.addEventListener('submit', addElement);
+
+    const addScopeForm = document.getElementById('addScopeForm');
+    addScopeForm.addEventListener('submit', addScope);
 
     fetch('elements.json')
         .then(response => response.json())
@@ -23,6 +31,13 @@ document.addEventListener('DOMContentLoaded', () => {
         })
         .catch(error => console.error('Error fetching elements:', error));
 
+    fetch('scopes.json')
+        .then(response => response.json())
+        .then(data => {
+            scopes = data; // Populate the scopes array with data from JSON
+            filteredScopes = scopes; // Initialize filtered scopes with all scopes
+        })
+        .catch(error => console.error('Error fetching scopes:', error));
 
     // Event listener for input change in the search bar
     elementSearch.addEventListener('input', () => {
@@ -31,6 +46,15 @@ document.addEventListener('DOMContentLoaded', () => {
             ? elements.filter(element => element.name.toLowerCase().includes(searchQuery))
             : elements; // Reset filtered elements to all elements if search query is empty
         populateElementOptions();
+    });
+
+    // Event listener for input change in the search bar
+    scopeSearch.addEventListener('input', () => {
+        const searchQuery = scopeSearch.value.toLowerCase();
+        filteredScopes = searchQuery
+            ? scopes.filter(scope => scope.name.toLowerCase().includes(searchQuery))
+            : scopes; // Reset filtered scopes to all scopes if search query is empty
+        populateScopeOptions();
     });
 
     // Populate the options based on the filtered elements
@@ -44,9 +68,25 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
+    // Populate the options based on the filtered scopes
+    function populateScopeOptions() {
+        scopeOptions.innerHTML = ''; // Clear existing options
+        filteredScopes.forEach(scope => {
+            const option = document.createElement('div');
+            option.textContent = scope.name;
+            option.addEventListener('click', () => selectScope(scope.name));
+            scopeOptions.appendChild(option);
+        });
+    }
+
     function selectElement(name) {
         elementSearch.value = name;
         elementOptions.innerHTML = ''; // Clear options after selection
+    }
+
+    function selectScope(name) {
+        scopeSearch.value = name;
+        scopeOptions.innerHTML = ''; // Clear options after selection
     }
 
     function addElement(e) {
@@ -66,6 +106,15 @@ document.addEventListener('DOMContentLoaded', () => {
             newElement.appendChild(prefixTextNode);
     
             // If the element has parameters, create input fields
+            // Wrap the element if the wrapped property is set to true.
+            if (selectedElement.wrapped) {
+                console.log('Wrapped element.')
+                // Wrap in curly brackets
+                const bracketContainer = document.createElement('div');
+                bracketContainer.classList.add('param-container');
+                newElement.appendChild(document.createTextNode(' {'));
+            }
+
             if (selectedElement.parameters && selectedElement.parameters.length > 0) {
                 if (selectedElement.parameters.length === 1) {
                     // Single parameter: just add the input field without curly brackets
@@ -93,12 +142,9 @@ document.addEventListener('DOMContentLoaded', () => {
                     inputField.classList.add('element-input');
                     inputField.name = param.name; // Set the name attribute for the input field
                     newElement.appendChild(inputField);
-                } else {
-                    // Multiple parameters: wrap them in curly brackets and display their names
+                } else {    
                     const paramContainer = document.createElement('div');
                     paramContainer.classList.add('param-container');
-                    newElement.appendChild(document.createTextNode(' {'));
-    
                     selectedElement.parameters.forEach((param) => {
                         const paramWrapper = document.createElement('div');
     
@@ -134,16 +180,28 @@ document.addEventListener('DOMContentLoaded', () => {
     
                         paramContainer.appendChild(paramWrapper);
                     });
-    
                     newElement.appendChild(paramContainer);
-                    const closingBraceNode = document.createElement('div');
-                    closingBraceNode.textContent = '}';
-                    newElement.appendChild(closingBraceNode);
                 }
             }
     
+            // Finish wrapping the element if the wrapped property is set to true.
+            if (selectedElement.wrapped) {
+                const closingBraceNode = document.createElement('div');
+                closingBraceNode.textContent = '}';
+                newElement.appendChild(closingBraceNode);
+            }
+
             // Store canContain property
             newElement.dataset.canContain = selectedElement.canContain.toString();
+    
+            // Store validScope property
+            newElement.dataset.validScope = selectedElement.validScope;
+    
+            // Store type property
+            newElement.dataset.type = selectedElement.type.toString();
+    
+            // Store original text property
+            newElement.dataset.originalInnerHTML = newElement.innerHTML;
     
             newElement.addEventListener('dragstart', dragStart);
             newElement.addEventListener('dragover', dragOver);
@@ -159,6 +217,61 @@ document.addEventListener('DOMContentLoaded', () => {
             filteredElements = elements;
         } else {
             alert('Please select a valid element.');
+        }
+    }
+
+    function addScope(e) {
+        e.preventDefault();
+        const selectedScopeName = scopeSearch.value;
+        const selectedScope = scopes.find(scope => scope.name === selectedScopeName);
+        if (selectedScope) {
+            const newScope = document.createElement('div');
+            newScope.classList.add('scope');
+            newScope.draggable = true;
+            newScope.id = 'scope' + nextScopeId;
+            nextScopeId++;
+    
+            // Create text node for the prefix
+            const prefixTextNode = document.createTextNode(selectedScope.prefix);
+            newScope.appendChild(prefixTextNode);
+    
+            // If the scope has parameters, create input fields
+            // Wrap the scope if the wrapped property is set to true.
+            if (selectedScope.wrapped) {
+                console.log('Wrapped scope.')
+                // Wrap in curly brackets
+                const bracketContainer = document.createElement('div');
+                bracketContainer.classList.add('param-container');
+                newScope.appendChild(document.createTextNode(' { # Scope: ' + selectedScope.scope));
+
+                const closingBraceNode = document.createElement('div');
+                closingBraceNode.textContent = '}';
+                newScope.appendChild(closingBraceNode);
+            }
+
+            // Store canContain property
+            newScope.dataset.canContain = selectedScope.canContain.toString();
+    
+            // Store validScope property
+            newScope.dataset.validScope = selectedScope.validScope;
+        
+            // Store original text property
+            newScope.dataset.scope = selectedScope.scope;
+    
+            newScope.addEventListener('dragstart', dragStart);
+            newScope.addEventListener('dragover', dragOver);
+            newScope.addEventListener('dragenter', dragEnter);
+            newScope.addEventListener('dragleave', dragLeave);
+            newScope.addEventListener('drop', drop);
+    
+            document.querySelector('.elements').appendChild(newScope);
+            console.log('Added new scope:', selectedScope.name, 'with ID:', newScope.id);
+    
+            // Clear search bar and filtered scopes
+            scopeSearch.value = '';
+            filteredScopes = scopes;
+        } else {
+            alert('Please select a valid scope.');
         }
     }
                             
@@ -205,17 +318,27 @@ document.addEventListener('DOMContentLoaded', () => {
         const container = e.target.closest('.container');
     
         if (container) { // Check if the drop target is a container
-            console.log(droppedElement.dataset.canContain);
-            console.log(container.dataset.canContain);
-            console.log(e.target.dataset.canContain);
             const canContain = e.target.dataset.canContain; // Check if the container can contain other elements
-            console.log(canContain)
-            if (canContain === 'true') { // Check if the dropped element is an element and if the container is a valid drop target
-                e.target.appendChild(droppedElement);
-                console.log('Appended', id, 'to', e.target.id);
+
+            let validScopeArr = droppedElement.dataset.validScope;
+            let targetScope = e.target.dataset.scope;
+
+            if (validScopeArr.includes(targetScope)) {
+                if (canContain === 'true') { // Check if the dropped element is an element and if the container is a valid drop target
+                    if (droppedElement.dataset.type === 'logic') {
+                        droppedElement.dataset.scope = targetScope;
+                        droppedElement.innerHTML = droppedElement.dataset.originalInnerHTML.replace('{<div>','{ # Scope: ' + targetScope + '<div>');
+                    }
+
+                    e.target.appendChild(droppedElement);
+                    console.log('Appended', id, 'to', e.target.id);
+                } else {
+                    console.log('Invalid target.');
+                }
             } else {
-                console.log('Invalid target.');
+                alert('Invalid scope.')
             }
+
         } else {
             console.log('Tried to drop into non-container.');
         }

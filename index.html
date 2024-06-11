@@ -10,8 +10,8 @@
     <h1>EU4 MT generator</h1>
     <div class="main-content">
         <div class="containers">
-            <div class="container" id="trigger-container" data-scope="country" data-can-contain="true">Trigger (ROOT Scope)</div>
-            <div class="container" id="effect-container" data-scope="country" data-can-contain="true">Effect (ROOT Scope)</div>
+            <div class="container" id="trigger-container" data-scope="country" data-can-contain="true">Trigger # Scope: country</div>
+            <div class="container" id="effect-container" data-scope="country" data-can-contain="true">Effect # Scope: country</div>
         </div>
         <div class="elements">
             <div class="delete-container" id="delete-container" data-can-contain="true">Drop elements here to delete</div>
@@ -21,6 +21,13 @@
                 <input type="text" id="elementSearch" name="elementSearch" placeholder="Search for an element...">
                 <div id="elementOptions" class="element-options"></div>
                 <button type="submit">Add Element</button>
+            </form>
+            <h2>Add New Scope</h2>
+            <form id="addScopeForm">
+                <label for="scopeSearch">Search Element:</label>
+                <input type="text" id="scopeSearch" name="scopeSearch" placeholder="Search for a scope...">
+                <div id="scopeOptions" class="scope-options"></div>
+                <button type="submit">Add Scope</button>
             </form>
             <h2>Elements</h2>
         </div>

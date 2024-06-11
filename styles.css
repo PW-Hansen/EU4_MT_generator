@@ -70,6 +70,14 @@ h1 {
     background-color: #f0f0f0;
 }
 
+.scope {
+    padding: 20px;
+    margin: 10px;
+    border: 1px solid #000;
+    cursor: pointer;
+    background-color: #f0f0f0;
+}
+
 .drag-over {
     border-style: dashed;
     border-width: 3px;

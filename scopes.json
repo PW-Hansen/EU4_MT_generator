@@ -1,0 +1,47 @@
+[
+    {
+        "name": "A01 (Lorent)",
+        "scope": "country",
+        "validScope": ["country", "province"],
+        "prefix": "A01 = ",
+        "canContain": true,
+        "wrapped": true,
+        "parameters": [ ]
+    },
+    {
+        "name": "A20 (Rubyhold)",
+        "scope": "country",
+        "validScope": ["country", "province"],
+        "prefix": "A20 = ",
+        "canContain": true,
+        "wrapped": true,
+        "parameters": [ ]
+    },
+    {
+        "name": "A73 (Silverforge)",
+        "scope": "country",
+        "validScope": ["country", "province"],
+        "prefix": "A73 = ",
+        "canContain": true,
+        "wrapped": true,
+        "parameters": [ ]
+    },
+    {
+        "name": "62 (Rubyhold)",
+        "scope": "province",
+        "validScope": ["country", "province"],
+        "prefix": "62 = ",
+        "canContain": true,
+        "wrapped": true,
+        "parameters": [ ]
+    },
+    {
+        "name": "308 (Silverforge Hall)",
+        "scope": "province",
+        "validScope": ["country", "province"],
+        "prefix": "308 = ",
+        "canContain": true,
+        "wrapped": true,
+        "parameters": [ ]
+    }
+]
